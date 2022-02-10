@@ -1,16 +1,17 @@
+import "reflect-metadata";
 import express, { Request, Response, NextFunction } from "express";
 import "express-async-errors";
 import swaggerUi from "swagger-ui-express";
-
-import "../typeorm";
 
 import "@shared/container";
 
 import { AppError } from "@shared/errors/AppError";
 import { router } from "@shared/infra/http/routes";
+import createConnection from "@shared/infra/typeorm";
 
 import swaggerFile from "../../../swagger.json";
 
+createConnection();
 const app = express();
 
 app.use(express.json());
@@ -27,6 +28,8 @@ app.use(
                 message: err.message,
             });
         }
+
+        console.log(err);
 
         return response.status(500).json({
             status: "error",
